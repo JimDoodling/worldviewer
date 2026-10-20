@@ -1,0 +1,30 @@
+import SwiftUI
+import AVFoundation
+
+// 1. The SwiftUI Bridge
+struct CameraPreviewView: UIViewRepresentable {
+    let session: AVCaptureSession
+    
+    func makeUIView(context: Context) -> UICameraPreviewView {
+        let view = UICameraPreviewView()
+        view.backgroundColor = .black
+        view.videoPreviewLayer.session = session
+        view.videoPreviewLayer.videoGravity = .resizeAspectFill
+        return view
+    }
+    
+    func updateUIView(_ uiView: UICameraPreviewView, context: Context) {
+        // Core updates happen inside the AVCaptureSession controller rather than here
+    }
+}
+
+// 2. The Native UIKit View handling the video layer
+class UICameraPreviewView: UIView {
+    override class var layerClass: AnyClass {
+        return AVCaptureVideoPreviewLayer.self
+    }
+    
+    var videoPreviewLayer: AVCaptureVideoPreviewLayer {
+        return layer as! AVCaptureVideoPreviewLayer
+    }
+}
